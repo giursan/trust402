@@ -1,0 +1,209 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model BuyerAgent {
+  id            String      @id @default(cuid())
+  name          String
+  publicKey     String?
+  walletAddress String?
+  policyJson    String
+  createdAt     DateTime    @default(now())
+  tasks         TrustTask[]
+}
+
+model Verifier {
+  id                String       @id @default(cuid())
+  name              String
+  type              String
+  category          String
+  reputation        Float        @default(0.5)
+  availabilityScore Float        @default(1.0)
+  minPriceSats      Int          @default(1)
+  avgLatencySec     Int          @default(10)
+  walletAddress     String?
+  isOnline          Boolean      @default(true)
+  stakeSats         Int          @default(0)
+  arenaScore        Float        @default(0)
+  arenaAttempts     Int          @default(0)
+  arenaPassed       Boolean      @default(false)
+  createdAt         DateTime     @default(now())
+  assessments       Assessment[]
+  payouts           Payout[]
+  arenaResults      ArenaResult[]
+}
+
+model TrustTask {
+  id              String        @id @default(cuid())
+  buyerAgentId    String
+  buyerAgent      BuyerAgent    @relation(fields: [buyerAgentId], references: [id])
+  category        String
+  claim           String
+  contextJson     String
+  riskLevel       String
+  maxBudgetSats   Int
+  deadlineSeconds Int
+  minConfidence   Float
+  status          String        @default("QUOTED")
+  selectedRouteId String?
+  finalVerdict    String?
+  finalConfidence Float?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  quotes          MarketQuote[]
+  assessments     Assessment[]
+  proof            TrustProof?
+  payments         Payment[]
+  predictionMarket PredictionMarket?
+}
+
+model MarketQuote {
+  id              String        @id @default(cuid())
+  taskId          String
+  task            TrustTask     @relation(fields: [taskId], references: [id])
+  demandLevel     String
+  humanLiquidity  Int
+  agentLiquidity  Int
+  medianPriceSats Int
+  rushPremiumPct  Float
+  createdAt       DateTime      @default(now())
+  routes          RouteOption[]
+}
+
+model RouteOption {
+  id                     String      @id @default(cuid())
+  quoteId                String
+  quote                  MarketQuote @relation(fields: [quoteId], references: [id])
+  routeKey               String
+  label                  String
+  priceSats              Int
+  expectedConfidence     Float
+  expectedLatencySeconds Int
+  sellerPlanJson         String
+  isRecommended          Boolean     @default(false)
+}
+
+model Payment {
+  id          String    @id @default(cuid())
+  taskId      String
+  task        TrustTask @relation(fields: [taskId], references: [id])
+  type        String
+  status      String    @default("PENDING")
+  amountSats  Int
+  invoice     String?
+  preimage    String?
+  l402Token   String?
+  provider    String
+  receiptJson String?
+  createdAt   DateTime  @default(now())
+  settledAt   DateTime?
+}
+
+model Assessment {
+  id           String    @id @default(cuid())
+  taskId       String
+  task         TrustTask @relation(fields: [taskId], references: [id])
+  verifierId   String
+  verifier     Verifier  @relation(fields: [verifierId], references: [id])
+  verdict      String
+  confidence   Float
+  evidenceJson String
+  latencyMs    Int
+  costSats     Int
+  signature    String?
+  createdAt    DateTime  @default(now())
+}
+
+model TrustProof {
+  id           String    @id @default(cuid())
+  taskId       String    @unique
+  task         TrustTask @relation(fields: [taskId], references: [id])
+  verdict      String
+  confidence   Float
+  evidenceJson String
+  proofJson    String
+  signature    String
+  createdAt    DateTime  @default(now())
+}
+
+model Payout {
+  id          String    @id @default(cuid())
+  verifierId  String
+  verifier    Verifier  @relation(fields: [verifierId], references: [id])
+  taskId      String
+  amountSats  Int
+  status      String    @default("PENDING")
+  invoice     String?
+  paymentHash String?
+  createdAt   DateTime  @default(now())
+  paidAt      DateTime?
+}
+
+model MarketEvent {
+  id          String   @id @default(cuid())
+  type        String
+  category    String
+  taskId      String?
+  payloadJson String
+  createdAt   DateTime @default(now())
+}
+
+model ArenaChallenge {
+  id           String        @id @default(cuid())
+  sourceTaskId String?
+  category     String
+  claim        String
+  contextJson  String
+  knownVerdict String
+  isHoneypot   Boolean       @default(false)
+  difficulty   String        @default("normal")
+  status       String        @default("OPEN")
+  escrowSats   Int           @default(40)
+  stakeSats    Int           @default(2)
+  slashedSats  Int           @default(0)
+  createdAt    DateTime      @default(now())
+  results      ArenaResult[]
+}
+
+model ArenaResult {
+  id             String         @id @default(cuid())
+  challengeId    String
+  challenge      ArenaChallenge @relation(fields: [challengeId], references: [id])
+  verifierId     String
+  verifier       Verifier       @relation(fields: [verifierId], references: [id])
+  verdict        String
+  confidence     Float
+  evidenceJson   String
+  responseTimeMs Int
+  correct        Boolean
+  scoreAwarded   Float
+  createdAt      DateTime       @default(now())
+}
+
+model PredictionMarket {
+  id              String               @id @default(cuid())
+  taskId          String               @unique
+  task            TrustTask            @relation(fields: [taskId], references: [id])
+  status          String               @default("OPEN")
+  openedAt        DateTime             @default(now())
+  closesAt        DateTime
+  resolvedVerdict String?
+  totalPoolSats   Int                  @default(0)
+  positions       PredictionPosition[]
+}
+
+model PredictionPosition {
+  id               String           @id @default(cuid())
+  marketId         String
+  market           PredictionMarket @relation(fields: [marketId], references: [id])
+  bettorId         String
+  bettorName       String
+  predictedVerdict String
+  amountSats       Int
+  createdAt        DateTime         @default(now())
+}
