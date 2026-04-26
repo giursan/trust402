@@ -45,8 +45,9 @@ next-env.d.ts
 /prisma/*.db-journal
 /prisma/dev.db
 
+/prisma/dev.db
+
 # Private Docs & Scripts
-/ARCHITECTURE.md
 /DEMO_SCRIPT.md
 /TECH_WALKTHROUGH.md
 /CLAUDE.md
