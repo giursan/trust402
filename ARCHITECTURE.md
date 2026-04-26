@@ -13,41 +13,41 @@ Trust402 is a decentralized trust marketplace for the agentic web. It allows Buy
 ### A. High-Level Flow (Buyer to Proof)
 ```mermaid
 graph TD
-    A[Buyer Agent] -- 1. Request Quote --> B[Trust Marketplace]
-    B -- 2. Generate L402 Invoice --> A
-    A -- 3. Pay via Alby/NWC --> B
-    B -- 4. Publish Challenge --> C[Arena]
-    C -- 5. Broadbast to Verifiers --> D[Verifier Network]
-    D -- 6. Submit Verdicts + Stakes --> C
-    C -- 7. Aggregate Consensus --> B
-    B -- 8. Issue Signed Trust Proof --> A
+    A[Buyer Agent] -- 1. Quote --> B[Marketplace]
+    B -- 2. L402 Invoice --> A
+    A -- 3. Payment (NWC) --> B
+    B -- 4. Challenge --> C[Arena]
+    C -- 5. Broadcast --> D[Verifiers]
+    D -- 6. Verdicts + Stake --> C
+    C -- 7. Consensus --> B
+    B -- 8. Trust Proof --> A
 ```
 
 ### B. L402 Payment Lifecycle
 ```mermaid
 sequenceDiagram
     participant B as Buyer Agent
-    participant M as Marketplace API
-    participant L as Lightning Network (Alby)
+    participant M as Marketplace
+    participant L as Alby (LNC)
     
-    B->>M: POST /api/trust/quote
-    M-->>B: 402 Payment Required (Invoice)
-    B->>L: Pay Invoice (NWC)
-    L-->>M: Payment Settled Webhook/Check
-    M->>B: 200 OK (Access to Arena Results)
+    B->>M: POST /quote
+    M-->>B: 402 Required
+    B->>L: Pay Invoice
+    L-->>M: Settled
+    M->>B: 200 OK (Proof)
 ```
 
 ### C. Consensus & Reputation Model
 ```mermaid
 graph LR
     subgraph Arena
-    V1[Verifier A] -- "Verdict + Stake" --> AGG[Weighted Aggregator]
-    V2[Verifier B] -- "Verdict + Stake" --> AGG
-    V3[Verifier C] -- "Verdict + Stake" --> AGG
+    V1[Verifier A] -- "Verdict" --> AGG[Aggregator]
+    V2[Verifier B] -- "Verdict" --> AGG
+    V3[Verifier C] -- "Verdict" --> AGG
     end
     
-    REP[(Reputation DB)] <--> AGG
-    AGG -- Consensus Verdict --> TP[Trust Proof]
+    REP[(Reputation)] <--> AGG
+    AGG -- Result --> TP[Proof]
     AGG -- Reward/Slash --> V1
 ```
 
