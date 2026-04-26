@@ -225,7 +225,6 @@ export default function ArenaMarketplacePage() {
           </div>
           <nav className="flex items-center gap-3 text-xs">
             <Link href="/arena/leaderboard" className="font-semibold text-gray-500 hover:text-gray-900">Leaderboard</Link>
-            <Link href="/market" className="font-semibold text-gray-500 hover:text-gray-900">Analytics</Link>
             <Link href="/" className="font-semibold text-gray-400 hover:text-gray-700">&larr; Landing</Link>
           </nav>
         </div>

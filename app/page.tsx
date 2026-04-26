@@ -16,39 +16,6 @@ import {
 
 const navCards = [
   {
-    href: "/agent-demo",
-    icon: Zap,
-    title: "Agent Demo",
-    description: "Run the trust checkpoint yourself. Watch an agent quote, pay, verify, and decide before taking action.",
-    iconColor: "text-amber-600",
-    iconBg: "bg-amber-50",
-    border: "border-amber-200 hover:border-amber-300",
-    tag: "Interactive",
-    tagColor: "bg-amber-50 text-amber-700 border-amber-200",
-  },
-  {
-    href: "/reviewer",
-    icon: Shield,
-    title: "Reviewer Desk",
-    description: "See the human side of the market: specialists claim tasks, add evidence, and earn sats for judgment.",
-    iconColor: "text-blue-600",
-    iconBg: "bg-blue-50",
-    border: "border-blue-200 hover:border-blue-300",
-    tag: "Human Loop",
-    tagColor: "bg-blue-50 text-blue-700 border-blue-200",
-  },
-  {
-    href: "/market",
-    icon: BarChart3,
-    title: "Market State",
-    description: "Show demand, liquidity, pricing pressure, and who is getting paid when trust is purchased.",
-    iconColor: "text-emerald-600",
-    iconBg: "bg-emerald-50",
-    border: "border-emerald-200 hover:border-emerald-300",
-    tag: "Live View",
-    tagColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  },
-  {
     href: "/arena",
     icon: Trophy,
     title: "The Arena",
@@ -58,6 +25,17 @@ const navCards = [
     border: "border-red-200 hover:border-red-300",
     tag: "Adversarial",
     tagColor: "bg-red-50 text-red-700 border-red-200",
+  },
+  {
+    href: "/arena/leaderboard",
+    icon: Zap,
+    title: "Leaderboard",
+    description: "Track the top performing verifiers and their reputation across the network.",
+    iconColor: "text-amber-600",
+    iconBg: "bg-amber-50",
+    border: "border-amber-200 hover:border-amber-300",
+    tag: "Network Stats",
+    tagColor: "bg-amber-50 text-amber-700 border-amber-200",
   },
 ];
 
@@ -134,18 +112,15 @@ export default function HomePage() {
             <span className="text-lg font-bold text-gray-900">Trust402</span>
           </div>
           <nav className="flex items-center gap-1">
-            <Link href="/agent-demo" className="rounded-lg px-3 py-1.5 text-sm text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900">
-              Demo
+            <Link href="/arena" className="rounded-lg px-3 py-1.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-100">
+              The Arena
             </Link>
-            <Link href="/reviewer" className="rounded-lg px-3 py-1.5 text-sm text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900">
-              Reviewer
+            <Link href="/arena/leaderboard" className="rounded-lg px-3 py-1.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-100">
+              Leaderboard
             </Link>
-            <Link href="/market" className="rounded-lg px-3 py-1.5 text-sm text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900">
-              Market
-            </Link>
-            <Link href="/arena" className="rounded-lg px-3 py-1.5 text-sm text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900">
-              Arena
-            </Link>
+            <a href="https://github.com/giursan/trust402" target="_blank" className="rounded-lg px-3 py-1.5 text-sm text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-900">
+              GitHub
+            </a>
           </nav>
         </div>
       </header>
@@ -170,33 +145,21 @@ export default function HomePage() {
               <p className="mt-6 max-w-2xl text-lg leading-8 text-gray-600">
                 Trust402 turns risky actions into trust-gated actions. A browser agent hits an unsafe checkout, pays a few sats for verification over Lightning, gets a signed proof, and changes behavior before money is lost.
               </p>
-              <div className="mt-5 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 max-w-xl">
-                <div className="text-xs font-semibold uppercase tracking-wide text-red-600">Killer Demo Moment</div>
-                <div className="mt-1 text-sm leading-6 text-red-900">
-                  Without Trust402, the agent would have executed the payment. With Trust402, it buys trust first and blocks the scam.
-                </div>
-              </div>
+
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
-                  href="/agent-demo"
-                  className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-amber-400"
-                >
-                  Open Product Demo
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link
-                  href="/market"
-                  className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50"
-                >
-                  View Trust Market
-                  <BarChart3 className="h-4 w-4" />
-                </Link>
-                <Link
                   href="/arena"
-                  className="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-white px-6 py-3 text-sm font-semibold text-red-700 transition-colors hover:bg-red-50"
+                  className="inline-flex items-center gap-2 rounded-lg bg-slate-950 px-10 py-4 text-sm font-semibold text-white transition-all hover:bg-slate-800 hover:shadow-lg"
                 >
-                  Enter Arena
+                  Enter Trust Arena
                   <Trophy className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/arena/leaderboard"
+                  className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-10 py-4 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+                >
+                  View Leaderboard
+                  <Zap className="h-4 w-4" />
                 </Link>
               </div>
               <div className="mt-10 flex flex-wrap gap-2">
@@ -333,36 +296,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="px-6 py-16">
-          <div className="mx-auto max-w-6xl">
-            <div className="mb-8 text-center">
-              <div className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-400">Product Views</div>
-              <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-950">See the network from every angle</h2>
-            </div>
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-              {navCards.map(({ href, icon: Icon, title, description, iconColor, iconBg, border, tag, tagColor }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className={`group rounded-3xl border ${border} bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md`}
-                >
-                  <div className="mb-4 flex items-center justify-between">
-                    <div className={`flex h-11 w-11 items-center justify-center rounded-2xl ${iconBg}`}>
-                      <Icon className={`h-5 w-5 ${iconColor}`} />
-                    </div>
-                    <span className={`rounded-full border px-2.5 py-1 text-xs font-semibold ${tagColor}`}>{tag}</span>
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-gray-600">{description}</p>
-                  <div className="mt-5 flex items-center gap-1 text-sm font-medium text-gray-400 transition-colors group-hover:text-gray-700">
-                    Open view
-                    <ChevronRight className="h-4 w-4" />
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
       </main>
 
       <footer className="border-t border-gray-100 bg-white px-6 py-6">
